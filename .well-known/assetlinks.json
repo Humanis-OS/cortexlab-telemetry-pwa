@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.cortexlab.telemetry",
+      "sha256_cert_fingerprints": [
+        "FA_PE_R_IN_TE_HERE_VIA_PWABUILDER"
+      ]
+    }
+  }
+]
