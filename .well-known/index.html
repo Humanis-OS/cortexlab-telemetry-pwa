@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CortexLab System v5.0 — Telemetry Engine</title>
+    <meta name="theme-color" content="#080b10">
+    <link rel="manifest" href="manifest.json">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#080b10',
+                        charcoal: '#0f141c',
+                        neonCyan: '#00f2fe',
+                        neonGreen: '#8cc63f',
+                        glitchRed: '#f44336',
+                        warnOrange: '#ff9800',
+                        hudBorder: 'rgba(0, 242, 254, 0.25)'
+                    },
+                    fontFamily: { mono: ['JetBrains Mono', 'Menlo', 'monospace'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .cyber-grid {
+            background-color: #080b10;
+            background-image: 
+                radial-gradient(circle at 50% 18%, rgba(0, 242, 254, 0.12) 0%, transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(140, 198, 63, 0.08) 0%, transparent 55%),
+                linear-gradient(to right, rgba(0, 242, 254, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 242, 254, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+        }
+        .clip-hud { clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); }
+        .clip-hud-btn { clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)); }
+        .cyber-card { background: rgba(15, 20, 28, 0.85); border: 1px solid rgba(0, 242, 254, 0.22); backdrop-filter: blur(10px); }
+        .social-btn-3d { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: transform 0.2s; border: 1px solid rgba(255, 255, 255, 0.15); }
+        .social-btn-3d:hover { transform: translateY(-4px) scale(1.06); }
+        .social-btn-3d svg { width: 24px; height: 24px; fill: #ffffff; }
+        .btn-3d-yt { background: radial-gradient(circle at 35% 35%, #ff4d4d, #cc0000); }
+        .btn-3d-ig { background: radial-gradient(circle at 35% 35%, #fd5949, #d6249f 60%, #285AEB); }
+        .btn-3d-fb { background: radial-gradient(circle at 35% 35%, #4c8bf5, #1877f2); }
+        .btn-3d-tk { background: radial-gradient(circle at 35% 35%, #222222, #000000); border-color: rgba(0, 242, 254, 0.4); }
+        .btn-3d-in { background: radial-gradient(circle at 35% 35%, #00a0dc, #0077b5); }
+        .btn-3d-app { background: radial-gradient(circle at 35% 35%, #00f2fe, #0088cc); }
+    </style>
+</head>
+<body class="bg-obsidian text-slate-200 font-mono min-h-screen flex justify-center items-center select-none cyber-grid p-0 sm:p-4">
+
+    <!-- SHELL PWA DUAL-VIEWPORT (PC / MOBILE) -->
+    <div class="w-full max-w-[430px] h-screen sm:h-[92vh] max-h-[932px] bg-obsidian/95 border-0 sm:border border-neonCyan/30 sm:rounded-[36px] flex flex-col overflow-hidden relative shadow-[0_0_50px_rgba(0,0,0,0.95)]">
+        
+        <!-- HEADER KERNEL -->
+        <header class="bg-charcoal/90 border-b border-hudBorder p-3 backdrop-blur-md flex justify-between items-center sticky top-0 z-50">
+            <button onclick="goHome()" class="px-3 py-1 bg-neonCyan/10 border border-hudBorder hover:border-neonCyan text-neonCyan text-[11px] font-bold tracking-widest clip-hud-btn flex items-center space-x-1">
+                <span>🏠 ACCUEIL KERNEL</span>
+            </button>
+            <span class="text-[9px] text-neonGreen font-bold px-2 py-0.5 bg-neonGreen/10 border border-neonGreen/30 clip-hud-btn">SYSTEM READY</span>
+        </header>
+
+        <!-- MAIN VIEWPORT -->
+        <main class="flex-1 overflow-y-auto p-4 sm:p-5 space-y-6">
+
+            <!-- VUE 1 : ACCUEIL -->
+            <section id="view-home" class="view space-y-6">
+                <div class="text-center space-y-1">
+                    <h1 class="text-3xl font-black tracking-tight text-white">CORTEX<span class="text-neonGreen">LAB</span></h1>
+                    <p class="text-[9px] tracking-[2.5px] text-slate-400 uppercase">Comprendre. Décoder. Reprendre le contrôle.</p>
+                </div>
+
+                <div class="cyber-card p-4 clip-hud text-center border-neonCyan/40 bg-neonCyan/5">
+                    <h2 class="text-xs font-bold text-white uppercase tracking-widest">LE LABORATOIRE DU <span class="text-neonGreen">CERVEAU HUMAIN</span></h2>
+                </div>
+
+                <div class="flex justify-center space-x-2 text-[10px]">
+                    <span class="px-2 py-1 bg-charcoal border border-hudBorder text-neonCyan clip-hud-btn">KERNEL v5.0</span>
+                    <span class="px-2 py-1 bg-charcoal border border-hudBorder text-neonCyan clip-hud-btn">100% GRATUIT</span>
+                    <span class="px-2 py-1 bg-charcoal border border-hudBorder text-neonCyan clip-hud-btn">OFFLINE</span>
+                </div>
+
+                <div class="space-y-2">
+                    <span class="text-[10px] font-bold text-neonGreen tracking-widest uppercase">SYSTÈME D'AUDIT D'OS MENTAL</span>
+                    <h3 class="text-lg font-bold text-white">Banc d'essai & Allocation RAM</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed cyber-card p-3 clip-hud">
+                        Outil d'ingénierie neutre. Ce protocole mesure l'allocation de votre RAM attentionnelle et identifie les siphonnages énergétiques exécutés en arrière-plan.
+                        <br><br><strong>Procédure :</strong> 11 arbitrages de situation brute.
+                    </p>
+                </div>
+
+                <button onclick="startAudit()" class="w-full py-4 bg-neonGreen/20 hover:bg-neonGreen/30 text-neonGreen border border-neonGreen clip-hud-btn font-bold text-xs tracking-wider transition-all">
+                    INITIALISER LA TÉLÉMÉTRIE ➔
+                </button>
+            </section>
+
+            <!-- VUE 2 : QUESTIONNAIRE -->
+            <section id="view-questionnaire" class="view hidden space-y-5">
+                <div class="cyber-card p-2 clip-hud text-center">
+                    <h2 class="text-[10px] font-bold text-white uppercase tracking-wider">ANALYSE DU FLUX : <span class="text-neonGreen">CORTEXLAB</span></h2>
+                </div>
+
+                <div class="space-y-2">
+                    <span id="seq-progress" class="text-[10px] font-bold text-neonGreen tracking-wider uppercase">SÉQUENCE 01 / 11</span>
+                    <h3 id="seq-question" class="text-xs font-bold text-neonCyan leading-snug"></h3>
+                </div>
+
+                <div id="seq-options" class="space-y-3"></div>
+            </section>
+
+            <!-- VUE 3 : RÉSULTATS DPE -->
+            <section id="view-results" class="view hidden space-y-5">
+                <div>
+                    <span class="text-[10px] font-bold text-neonGreen tracking-wider uppercase">DIAGNOSTIC DE PERFORMANCE ÉNERGÉTIQUE</span>
+                    <h2 class="text-base font-bold text-white">BILAN SOMATIQUE & KERNEL</h2>
+                </div>
+
+                <div class="cyber-card p-4 clip-hud space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="text-[9px] text-slate-400 block uppercase">Classe Système</span>
+                            <span id="res-class" class="text-4xl font-black text-warnOrange">C</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[9px] text-slate-400 block uppercase">Batterie Somatique</span>
+                            <span id="res-percent" class="text-2xl font-black text-white">65%</span>
+                            <span id="res-status" class="text-[9px] text-warnOrange font-bold block uppercase">CHARGÉ — SIPHONNAGE RAM</span>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-warnOrange/10 border border-warnOrange/40 rounded clip-hud space-y-2">
+                        <span class="text-[10px] text-warnOrange font-bold uppercase block">⚠️ LES 2 PLUS GROS SIPHONS DE RAM DÉTECTÉS :</span>
+                        <ul id="res-siphons" class="text-xs text-slate-200 space-y-1"></ul>
+                    </div>
+                </div>
+
+                <!-- BATTERIE DPE 3D -->
+                <div class="relative w-28 h-44 mx-auto border-2 border-slate-600 rounded-2xl p-1 bg-black/80">
+                    <div class="w-10 h-2 bg-slate-500 absolute -top-3 left-1/2 -translate-x-1/2 rounded-t"></div>
+                    <div id="battery-text" class="absolute inset-0 flex items-center justify-center text-xl font-black text-white z-10">65%</div>
+                    <div id="battery-fill" class="w-full bg-gradient-to-t from-neonGreen to-emerald-700 rounded-xl absolute bottom-1 left-0 right-0 transition-all duration-700" style="height: 65%;"></div>
+                </div>
+
+                <a id="link-yt-resources" href="#" target="_blank" class="cyber-card p-3 clip-hud block border-neonGreen/50 hover:border-neonGreen transition-all">
+                    <div class="text-xs font-bold text-neonGreen">🎧 VOIR LES RÉSUMÉS VIDÉO SUR LE SITE</div>
+                    <div class="text-[10px] text-slate-400">Accéder aux fiches cliniques et vidéos YouTube associées.</div>
+                </a>
+
+                <a id="link-pdf-report" href="#" target="_blank" class="cyber-card p-3 clip-hud block border-neonCyan/50 hover:border-neonCyan transition-all">
+                    <div class="text-xs font-bold text-neonCyan">📄 TÉLÉCHARGER LE RAPPORT PDF (ACCÈS SITE)</div>
+                    <div class="text-[10px] text-slate-400">Récupérer la fiche bilan depuis la zone ressources.</div>
+                </a>
+
+                <button onclick="saveLocalLog()" class="w-full py-3 bg-neonCyan/20 text-neonCyan border border-neonCyan clip-hud-btn font-bold text-xs uppercase">
+                    💾 SAUVEGARDER DANS MON APPAREIL
+                </button>
+
+                <button onclick="showEcosystem()" class="w-full py-3 bg-slate-800 text-slate-300 border border-slate-700 clip-hud-btn font-bold text-xs uppercase">
+                    CONTINUER VERS L'ÉCOSYSTÈME ➔
+                </button>
+            </section>
+
+            <!-- VUE 4 : ÉCOSYSTÈME & LIENS DIRECTS -->
+            <section id="view-ecosystem" class="view hidden space-y-5">
+                <div>
+                    <span class="text-[10px] font-bold text-neonGreen tracking-wider uppercase">MAINTENANCE & INFRASTRUCTURE</span>
+                    <h2 class="text-base font-bold text-white">HUB D'ACCÈS PROPRIÉTAIRE CORTEXLAB</h2>
+                </div>
+
+                <!-- GRILLE 3D RÉSEAUX SOCIAUX -->
+                <div class="grid grid-cols-3 gap-3 py-1">
+                    <a id="soc-yt" href="#" target="_blank" class="social-btn-3d btn-3d-yt mx-auto"><svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+                    <a id="soc-ig" href="#" target="_blank" class="social-btn-3d btn-3d-ig mx-auto"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+                    <a id="soc-fb" href="#" target="_blank" class="social-btn-3d btn-3d-fb mx-auto"><svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+                    <a id="soc-tk" href="#" target="_blank" class="social-btn-3d btn-3d-tk mx-auto"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.82.56-1.31 1.55-1.32 2.54-.02.99.38 1.98 1.13 2.61.85.72 2.06.96 3.12.63 1.02-.3 1.82-1.15 2.08-2.18.15-.65.17-1.33.16-2.01.03-4.4.01-8.79.02-13.19z"/></svg></a>
+                    <a id="soc-in" href="#" target="_blank" class="social-btn-3d btn-3d-in mx-auto"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                    <a id="soc-web" href="#" target="_blank" class="social-btn-3d btn-3d-app mx-auto"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></a>
+                </div>
+
+                <div class="cyber-card p-4 clip-hud border-warnOrange/50 bg-warnOrange/5 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-bold text-warnOrange">🔒 CARTOGRAPHIE KERNEL SUR-MESURE</span>
+                        <span class="text-[9px] bg-warnOrange/20 text-warnOrange px-2 py-0.5 rounded clip-hud-btn">PREMIUM</span>
+                    </div>
+                    <p class="text-[11px] text-slate-300">Session individuelle d'audit d'OS Mental & accès à la matrice des 11 fiches cliniques.</p>
+                    <a id="link-session" href="#" target="_blank" class="w-full py-2 bg-warnOrange/20 text-warnOrange border border-warnOrange clip-hud-btn text-xs font-bold uppercase block text-center">
+                        RÉSERVER SUR LE SITE ➔
+                    </a>
+                </div>
+
+                <a id="link-kdp" href="#" target="_blank" class="cyber-card p-3 clip-hud block hover:border-neonCyan transition-all">
+                    <div class="text-xs font-bold text-white">📚 MANUELS KDP AMAZON (BIBLIOTHÈQUE SITE)</div>
+                    <div class="text-[10px] text-slate-400">Accéder aux éditions officielles Amazon sur le site.</div>
+                </a>
+
+                <div class="cyber-card p-3 clip-hud space-y-2">
+                    <div class="text-xs font-bold text-neonCyan">📜 HISTORIQUE DES AUDITS LOCAUX</div>
+                    <div id="local-history" class="text-[10px] text-slate-400 space-y-1 max-h-24 overflow-y-auto">
+                        <em>Aucun audit sauvegardé pour le moment.</em>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="p-3 bg-charcoal border-t border-hudBorder text-[9px] text-slate-500 text-center">
+            © 2026 HH_OS / CortexLab Academy — Application Autonome.
+        </footer>
+    </div>
+
+    <!-- CONFIGURATION CENTRALISÉE & MOTEUR JS -->
+    <script>
+        // CONFIGURATION DE VOS LIENS
+        const APP_CONFIG = {
+            socials: {
+                youtube: "https://www.youtube.com/@HomoHumanis-OS",
+                instagram: "https://www.instagram.com/homo_humanis.os/",
+                facebook: "https://www.facebook.com/profile.php?id=61594089628196",
+                tiktok: "https://www.tiktok.com/@humanis.os",
+                linkedin: "https://www.linkedin.com/in/khaled-hamrouni-740105433/",
+                website: "https://homohumanis-os.com"
+            },
+            siteAnchors: {
+                videoResources: "https://homohumanis-os.com/",
+                pdfReport: "https://homohumanis-os.com/",
+                premiumSession: "https://homohumanis-os.com/",
+                amazonLibrary: "https://homohumanis-os.com/"
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('soc-yt').href = APP_CONFIG.socials.youtube;
+            document.getElementById('soc-ig').href = APP_CONFIG.socials.instagram;
+            document.getElementById('soc-fb').href = APP_CONFIG.socials.facebook;
+            document.getElementById('soc-tk').href = APP_CONFIG.socials.tiktok;
+            document.getElementById('soc-in').href = APP_CONFIG.socials.linkedin;
+            document.getElementById('soc-web').href = APP_CONFIG.socials.website;
+
+            document.getElementById('link-yt-resources').href = APP_CONFIG.siteAnchors.videoResources;
+            document.getElementById('link-pdf-report').href = APP_CONFIG.siteAnchors.pdfReport;
+            document.getElementById('link-session').href = APP_CONFIG.siteAnchors.premiumSession;
+            document.getElementById('link-kdp').href = APP_CONFIG.siteAnchors.amazonLibrary;
+            loadHistory();
+        });
+
+        // KERNEL TÉLÉMÉTRIE
+        const sequences = [
+            { name: "Siphonnage Narratif", question: "1. Lorsqu'une information importante reste en attente, comment réagit ton OS ?", options: [ { text: "Mon système isole les faits bruts horodatés. Je réaffecte 100% de ma RAM attentionnelle.", ifa: 0 }, { text: "Mon système génère des hypothèses en arrière-plan. Consultation fréquente du canal.", ifa: 1 }, { text: "Mon système installe l'application 'Défense'. Je fabrique un scénario et rafraîchis la boîte.", ifa: 2 } ] },
+            { name: "Commande Motrice Réflexe", question: "2. Face à une friction sur un dossier complexe, quel est le premier mouvement de ton système ?", options: [ { text: "Maintien de l'immobilité. Pause de 2 secondes pour recalibrer l'action utile.", ifa: 0 }, { text: "Hésitation physique et micro-agitation des doigts sur le bureau.", ifa: 1 }, { text: "Saisie compulsive instantanée du smartphone pour ouvrir une appli de décharge.", ifa: 2 } ] },
+            { name: "Agitation d'Évitement", question: "3. Quand une tâche à fort enjeu exige de la bande passante, que fait ton processeur ?", options: [ { text: "Lancement de la tâche par une micro-action irréfusable d'une minute.", ifa: 0 }, { text: "Ouverture de sous-dossiers secondaires légers avant de traiter l'essentiel.", ifa: 1 }, { text: "Bascule immédiate sur du rangement stérile ou du multitâche inutile.", ifa: 2 } ] },
+            { name: "Surrégime Somatique", question: "4. Lorsque la fatigue physique est signalée par le corps en cours de journée :", options: [ { text: "Activer un verrou de marge : coupure des intrants et pause neutre sans écran.", ifa: 0 }, { text: "Forcer le rythme en grignotant sur l'attention de fin de journée.", ifa: 1 }, { text: "Consommation de stimulants (caféine/sucre) pour masquer la jauge vide.", ifa: 2 } ] },
+            { name: "Public Fantôme & Repli", question: "5. Avant de prendre la parole ou de publier un projet, quelle boucle s'active ?", options: [ { text: "Focalisation stricte sur la donnée factuelle transmise. Risque de statut ignoré.", ifa: 0 }, { text: "Anticipation des critiques mineures et relecture anxieuse du support.", ifa: 1 }, { text: "Freeze complet par peur de disqualification dans la jungle sociale.", ifa: 2 } ] },
+            { name: "Permission Préalable", question: "6. Pour valider une décision d'ingénierie personnelle ou un choix stratégique :", options: [ { text: "Exécution directe de la commande dès l'arbitrage factuel posé.", ifa: 0 }, { text: "Recherche discrète de réassurance auprès d'un tiers avant d'agir.", ifa: 1 }, { text: "Paralysie totale tant qu'un signal d'approbation extérieure n'est pas émis.", ifa: 2 } ] },
+            { name: "Conflit Auto-Violence", question: "7. Lorsqu'un bug d'exécution ou une erreur survient dans ta journée :", options: [ { text: "Enregistrement du fait brut sans narration. Correction mécanique du tir.", ifa: 0 }, { text: "Agacement interne temporaire et comparaison rapide avec autrui.", ifa: 1 }, { text: "Lancement du dialogue interne d'invalidation (siphonnage de 100% de la RAM).", ifa: 2 } ] },
+            { name: "Siphonnage Attentionnel Passif", question: "8. Quand une sollicitation tiers non prioritaire survient dans ton espace :", options: [ { text: "Activation du pare-feu attentionnel. Refus ou report immédiat.", ifa: 0 }, { text: "Traitement partiel en éprouvant de la rancœur interne.", ifa: 1 }, { text: "Abandon immédiat de son dossier pour répondre aux urgences d'autrui.", ifa: 2 } ] },
+            { name: "Soumission Apprise", question: "9. Face à une contrainte lourde répétée ou une règle obsolète :", options: [ { text: "Recherche active de 3 options réelles et arbitrage du coût consenti.", ifa: 0 }, { text: "Plainte passive tout en continuant d'exécuter la routine.", ifa: 1 }, { text: "Activation du verrou 'Je n'ai pas le choix' et résignation complète.", ifa: 2 } ] },
+            { name: "Réflexe Jungle Sociale", question: "10. Lors d'un désaccord ou d'une provocation mineure sur un réseau ou en réunion :", options: [ { text: "Coupure de boucle. Isolement des faits et silence de sécurité.", ifa: 0 }, { text: "Préparation mentale de réponses cinglantes pour défendre son statut.", ifa: 1 }, { text: "Embrasement du système et escalade verbale pour gagner le conflit d'égo.", ifa: 2 } ] },
+            { name: "Simulation Nocturne Circulaire", question: "11. Une fois couché, quelle est l'activité d'arrière-plan du processeur ?", options: [ { text: "Mise en veille instantanée du système. Vidage de la mémoire cache.", ifa: 0 }, { text: "Scan rapide des tâches du lendemain pendant 15 minutes.", ifa: 1 }, { text: "Recomposition et replay en boucle des litiges ou erreurs passées.", ifa: 2 } ] }
+        ];
+
+        let currentStep = 0, totalScoreIFA = 0, siphonsScores = [], lastCalculatedPct = 100, lastDpeClass = "A";
+
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById(viewId).classList.remove('hidden');
+            document.querySelector('main').scrollTop = 0;
+        }
+
+        function goHome() { currentStep = 0; totalScoreIFA = 0; siphonsScores = []; showView('view-home'); }
+        function startAudit() { currentStep = 0; totalScoreIFA = 0; siphonsScores = []; showStep(); showView('view-questionnaire'); }
+
+        function showStep() {
+            const seq = sequences[currentStep];
+            document.getElementById('seq-progress').innerText = `ANALYSE DU FLUX : SÉQUENCE ${String(currentStep + 1).padStart(2, '0')} / 11`;
+            document.getElementById('seq-question').innerText = seq.question;
+            const container = document.getElementById('seq-options');
+            container.innerHTML = '';
+            seq.options.forEach(opt => {
+                const card = document.createElement('div');
+                card.className = 'cyber-card p-4 clip-hud cursor-pointer hover:border-neonCyan transition-all text-xs leading-relaxed text-slate-200';
+                card.innerText = opt.text;
+                card.onclick = () => selectOption(opt.ifa, seq.name);
+                container.appendChild(card);
+            });
+        }
+
+        function selectOption(ifaValue, siphonName) {
+            totalScoreIFA += ifaValue;
+            siphonsScores.push({ name: siphonName, ifa: ifaValue });
+            currentStep++;
+            if (currentStep < sequences.length) { showStep(); } else { renderResults(); }
+        }
+
+        function renderResults() {
+            lastCalculatedPct = Math.max(10, Math.round(100 - (totalScoreIFA / 22) * 90));
+            let statusText = "MARGE NATIVE OPTIMALE";
+            if (totalScoreIFA <= 2) { lastDpeClass = "A"; statusText = "SYSTÈME OPTIMISÉ — MARGE NATIVE"; }
+            else if (totalScoreIFA <= 5) { lastDpeClass = "B"; statusText = "SYSTÈME STABLE — BONNE ALLOCATION"; }
+            else if (totalScoreIFA <= 9) { lastDpeClass = "C"; statusText = "CHARGÉ — SIPHONNAGE RAM"; }
+            else if (totalScoreIFA <= 13) { lastDpeClass = "D"; statusText = "SURRÉGIME SOMATIQUE"; }
+            else if (totalScoreIFA <= 16) { lastDpeClass = "E"; statusText = "PASSOIRE THERMIQUE"; }
+            else if (totalScoreIFA <= 19) { lastDpeClass = "F"; statusText = "ÉTAT CRITIQUE — FUSIBLES H.S."; }
+            else { lastDpeClass = "G"; statusText = "SURCHAUFFE KERNEL TOTALE"; }
+
+            document.getElementById('res-class').innerText = lastDpeClass;
+            document.getElementById('res-percent').innerText = lastCalculatedPct + "%";
+            document.getElementById('res-status').innerText = statusText;
+            document.getElementById('battery-text').innerText = lastCalculatedPct + "%";
+
+            const fillEl = document.getElementById('battery-fill');
+            fillEl.style.height = lastCalculatedPct + "%";
+            if (lastCalculatedPct < 30) {
+                fillEl.className = "w-full bg-gradient-to-t from-glitchRed to-red-800 rounded-xl absolute bottom-1 left-0 right-0 transition-all duration-700";
+            } else if (lastCalculatedPct < 60) {
+                fillEl.className = "w-full bg-gradient-to-t from-warnOrange to-amber-700 rounded-xl absolute bottom-1 left-0 right-0 transition-all duration-700";
+            } else {
+                fillEl.className = "w-full bg-gradient-to-t from-neonGreen to-emerald-700 rounded-xl absolute bottom-1 left-0 right-0 transition-all duration-700";
+            }
+
+            let sortedSiphons = [...siphonsScores].sort((a, b) => b.ifa - a.ifa);
+            const siphonsListEl = document.getElementById('res-siphons');
+            siphonsListEl.innerHTML = '';
+            sortedSiphons.slice(0, 2).forEach(s => {
+                const li = document.createElement('li');
+                li.innerHTML = `• <strong>${s.name}</strong> <span class="text-slate-400 text-[10px]">(IFA: ${s.ifa})</span>`;
+                siphonsListEl.appendChild(li);
+            });
+            showView('view-results');
+        }
+
+        function saveLocalLog() {
+            const logs = JSON.parse(localStorage.getItem('cortex_logs') || '[]');
+            logs.unshift({ date: new Date().toLocaleDateString(), pct: lastCalculatedPct, class: lastDpeClass });
+            localStorage.setItem('cortex_logs', JSON.stringify(logs.slice(0, 5)));
+            alert("Diagnostic enregistré localement dans la mémoire de votre appareil !");
+            loadHistory();
+        }
+
+        function loadHistory() {
+            const logs = JSON.parse(localStorage.getItem('cortex_logs') || '[]');
+            const historyEl = document.getElementById('local-history');
+            if (logs.length === 0) return;
+            historyEl.innerHTML = logs.map(l => `<div>• [${l.date}] Classe: <strong>${l.class}</strong> (${l.pct}%)</div>`).join('');
+        }
+
+        function showEcosystem() { showView('view-ecosystem'); }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js').catch(() => {});
+        }
+    </script>
+</body>
+</html>
