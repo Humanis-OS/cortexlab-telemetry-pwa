@@ -1,44 +1,12 @@
-{
-  "id": "com.cortexlab.telemetry.pwa.v5",
-  "name": "CortexLab System — Telemetry Engine",
-  "short_name": "CortexLab",
-  "description": "Système d'audit d'OS Mental, mesure de la batterie somatique et identification du siphonnage de RAM attentionnelle.",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#080b10",
-  "theme_color": "#080b10",
-  "orientation": "portrait",
-  "launch_handler": {
-    "client_mode": "focus-existing"
-  },
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.cortexlab.telemetry",
+      "sha256_cert_fingerprints": [
+        "AE:AA:D2:23:BA:5E:85:0B:56:B9:72:D0:56:42:78:F1:9B:18:91:4D:D3:7E:D1:57:AD:0B:7F:C7:EE:20:3A:40"
+      ]
     }
-  ],
-  "shortcuts": [
-    {
-      "name": "Lancer l'Audit RAM",
-      "short_name": "Audit",
-      "description": "Exécuter la télémétrie des 11 séquences",
-      "url": "./index.html#view-questionnaire",
-      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
-    },
-    {
-      "name": "Hub Écosystème",
-      "short_name": "Écosystème",
-      "description": "Accéder aux fiches cliniques et canaux",
-      "url": "./index.html#view-ecosystem",
-      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
-    }
-  ]
-}
+  }
+]
